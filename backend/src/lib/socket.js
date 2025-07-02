@@ -4,14 +4,11 @@ import express from "express";
 
 const app = express();
 const server = http.createServer(app);
+const WHITELIST = process.env.FRONTEND_ORIGINS.split(",").map((url) => url.trim());
 
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://chat-frontend-io9e.vercel.app",
-      "*"
-    ],
+    origin: WHITELIST,
     credentials: true
   },
 });
