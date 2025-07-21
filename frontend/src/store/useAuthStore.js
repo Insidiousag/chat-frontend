@@ -5,7 +5,7 @@ import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-// ✅ Corrected socket base URL
+
 const BASE_URL = import.meta.env.VITE_API_SOCKET_URL;
 
 export const useAuthStore = create((set, get) => ({

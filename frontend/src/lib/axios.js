@@ -1,14 +1,9 @@
-// // src/axios.js
-// import axios from "axios";
 
-// export const axiosInstance = axios.create({
-//   baseURL: import.meta.env.VITE_API_BASE_URL,
-//   withCredentials: true,
-// });
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 export const axiosInstance = axios.create({
-  baseURL: "https://chat-backend-bbts.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 // Automatically attach token in all requests
