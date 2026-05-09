@@ -1,51 +1,26 @@
 
+import dotenv from "dotenv";
+import { connectDB } from "./lib/db.js";
+import { app, server } from "./lib/socket.js";
 
-// import express from "express";
-// import dotenv from "dotenv";
-// import cookieParser from "cookie-parser";
-// import path from "path";
+dotenv.config();
 
-// import { connectDB } from "./lib/db.js";
-// import authRoutes from "./routes/auth.route.js";
-// import messageRoutes from "./routes/message.route.js";
-// import { app, server } from "./lib/socket.js";
+const PORT = process.env.PORT || 5001;
 
+(async () => {
+  try {
+    await connectDB();
+    console.log("✓ MongoDB connected");
 
-// dotenv.config();
+    server.listen(PORT, () => {
+      console.log(`✓ Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("✗ Failed to connect to MongoDB:", err);
+    process.exit(1);
+  }
+})();
 
-
-// const __dirname = path.resolve();
-// const PORT = process.env.PORT || 5001;
-
-
-// app.use(express.json());
-// app.use(cookieParser());
-
-
-// app.use("/api/auth", authRoutes);
-// app.use("/api/messages", messageRoutes);
-// app.use(express.static(path.join(__dirname, "..", "dist")));
-
-
-
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
-// });
-
-
-// (async () => {
-//   try {
-//     await connectDB();
-//     console.log(" MongoDB connected");
-
-//     server.listen(PORT, () => {
-//       console.log(` Server running on port ${PORT}`);
-//     });
-//   } catch (err) {
-//     console.error(" Failed to connect to MongoDB:", err);
-//     process.exit(1);
-//   }
-// })();
 
 
 import express from "express";
@@ -78,18 +53,22 @@ app.use(
   })
 );
 
-app.use(express.json());
+//app.use(express.json());
 app.use(cookieParser());
+
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
 
 // 2) Your API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 // 3) Serve frontend
-app.use(express.static(path.join(__dirname, "..", "dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
-});
+// app.use(express.static(path.join(__dirname, "..", "dist")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+// });
 
 (async () => {
   try {
